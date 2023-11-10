@@ -1,0 +1,30 @@
+server:
+  port: 8099
+
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8098/eureka/
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      routes:
+        - id: colis
+          uri: lb://colis
+          predicates:
+            - Path=/colis/**
+        - id: livreurs
+          uri: lb://livreurs
+          predicates:
+            - Path=/livreurs/**
+        - id: admins
+          uri: lb://admins
+          predicates:
+            - Path=/admins/**
+        - id: livraisons
+          uri: lb://livraison
+          predicates:
+            - Path=/livraison/**
