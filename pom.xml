@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.1.2</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+    <groupId>com.livraison</groupId>
+    <artifactId>projet</artifactId>
+    <version>0.0.3-SNAPSHOT</version>
+    <name>ensaadministrativegestion</name>
+    <packaging>pom</packaging>
+    <properties>
+        <java.version>17</java.version>
+        <spring-cloud.version>2022.0.4</spring-cloud.version>
+    </properties>
+    <modules>
+        <module>admins</module>
+        <module>zuul</module>
+        <module>livraisons</module>
+        <module>colis</module>
+        <module>livreurs</module>
+        <module>discovery-service</module>
+        <module>config</module>
+    </modules>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <annotationProcessorPaths>
+                        <!-- Ajoutez les dépendances nécessaires pour le traitement d'annotations, si nécessaire -->
+                        <path>
+                            <groupId>com.livraison</groupId>
+                            <artifactId>livraison-annotation-processor</artifactId>
+                            <version>1.0.0</version>
+                        </path>
+                    </annotationProcessorPaths>
+                    <excludes>
+                        <!-- Excluez les modules impliqués dans le cycle -->
+                        <exclude>com.livraison:colis</exclude>
+                        <exclude>com.livraison:livraisons</exclude>
+                        <exclude>com.livraison:admins</exclude>
+                        <exclude>com.livraison:livreurs</exclude>
+                        <!-- Ajoutez d'autres modules s'il y en a -->
+                    </excludes>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

@@ -1,5 +1,5 @@
 server:
-  port: 8099
+  port: 8079
 
 
 eureka:
@@ -8,7 +8,7 @@ eureka:
       defaultZone: http://localhost:8098/eureka/
 spring:
   application:
-    name: api-gateway
+    name: gateway
   cloud:
     gateway:
       routes:
@@ -21,9 +21,9 @@ spring:
           predicates:
             - Path=/livreurs/**
         - id: admins
-          uri: lb://admins
+          uri: lb://ADMINS
           predicates:
-            - Path=/admins/**
+            - Path=/amdins/**
         - id: livraisons
           uri: lb://livraison
           predicates:

@@ -1,14 +1,10 @@
 package com.livraison.livraisons.entity;
-
-//import com.livraison.colis.Entity.Colis;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 @Data
 @Entity
@@ -16,11 +12,14 @@ import java.util.List;
 @NoArgsConstructor
 public class Livraison {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Utiliser GenerationType.IDENTITY pour auto-incrémentation
     private Long id;
-    private Date date_livraison ;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @Temporal(TemporalType.DATE)
+    private Date date_livraison;
+    private String destination;
 
-    //@OneToMany(mappedBy = "livraison",cascade = CascadeType.ALL,orphanRemoval = true)
-    //private List<Colis> colis = new ArrayList<Colis>();
 
+    /*@OneToMany(mappedBy = "livraison", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Colis> colis = new ArrayList<>();*/
 }

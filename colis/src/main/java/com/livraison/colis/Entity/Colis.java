@@ -1,5 +1,4 @@
 package com.livraison.colis.Entity;
-//import com.livraison.livraisons.entity.Livraison;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,17 +13,14 @@ public class Colis {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String ville;
+    private Double poids;
     private String nom ;
     private String prenom;
     private String adresse;
     private String code; // Numéro de suivi du colis
     private String typeContenu; // Type de contenu du colis (électroniques, vêtements, etc.)
     private String status;
-    @Column(name = "livraison_id") // Nom de la colonne de la clé étrangère
+    @Column(name = "livraison_id")
+
     private Long livraisonId;
-
-    //@ManyToOne(fetch = FetchType.LAZY)
-    //@JoinColumn(name = "livraison_id")
-    //private Livraison livraison;
-
 }

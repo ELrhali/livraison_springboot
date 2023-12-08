@@ -11,6 +11,7 @@
         <module name="livreurs" />
         <module name="apigatewayservices" />
         <module name="gps" />
+        <module name="zuul" />
         <module name="config" />
         <module name="colis" />
         <module name="admins" />
@@ -20,7 +21,10 @@
     <bytecodeTargetLevel>
       <module name="adresses" target="17" />
       <module name="commandes" target="17" />
+      <module name="commercant" target="17" />
       <module name="discovery" target="17" />
+      <module name="ensaadministrativegestion" target="1.5" />
+      <module name="livraison" target="17" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
@@ -30,12 +34,16 @@
       <module name="apigatewayservices" options="-parameters" />
       <module name="colis" options="-parameters" />
       <module name="commandes" options="-parameters" />
+      <module name="commercant" options="-parameters" />
       <module name="config" options="-parameters" />
       <module name="discovery" options="-parameters" />
       <module name="discovery-service" options="-parameters" />
       <module name="gps" options="-parameters" />
+      <module name="livraison" options="-parameters" />
       <module name="livraisons" options="-parameters" />
       <module name="livreurs" options="-parameters" />
+      <module name="projet" options="-parameters" />
+      <module name="zuul" options="-parameters" />
     </option>
   </component>
 </project>

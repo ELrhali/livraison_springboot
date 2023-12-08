@@ -6,11 +6,15 @@
     <file url="file://$PROJECT_DIR$/apigatewayservices/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/colis/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/commandes/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/commercant/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/config/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/discovery-service/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/discovery/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/gps/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/livraisons/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/livreurs/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/zuul/src/main/java" charset="UTF-8" />
   </component>
 </project>
