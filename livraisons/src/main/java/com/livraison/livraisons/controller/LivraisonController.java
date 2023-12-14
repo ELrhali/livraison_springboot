@@ -1,5 +1,6 @@
 package com.livraison.livraisons.controller;
 
+import com.livraison.livraisons.dto.LivraisonDto;
 import com.livraison.livraisons.dto.ResponseDto;
 import com.livraison.livraisons.entity.Livraison;
 import com.livraison.livraisons.exception.LivraisonNotFoundException;
@@ -11,8 +12,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
+@CrossOrigin(origins = {"http://localhost:4200"})
 @RequestMapping("/api/livraisons")
 @RequiredArgsConstructor
 public class LivraisonController {
@@ -20,8 +23,26 @@ public class LivraisonController {
     private LivraisonService livraisonService;
     @Autowired
     RestTemplate restTemplate;
+    @GetMapping("/livreur/{livreurId}")
+    public ResponseEntity<List<LivraisonDto>> getLivraisonByLivreurId(@PathVariable Long livreurId) {
+        List<LivraisonDto> livraisonList = livraisonService.getLivraisonByLivreurId(livreurId);
+        return ResponseEntity.ok(livraisonList);
+    }
+    @GetMapping("/livreurs/{livreurId}")
+    public ResponseEntity<List<ResponseDto>> getLivraisonByLivreurIds(@PathVariable Long livreurId) {
+        List<ResponseDto> responseList = livraisonService.getLivraisonByLivreurId(livreurId)
+                .stream()
+                .map(livraisonDto -> livraisonService.getLivraisonWithColis(livraisonDto.getId()))
+                .collect(Collectors.toList());
 
+        return ResponseEntity.ok(responseList);
+    }
+    @GetMapping("/all-livraison")
+    public ResponseEntity<List<Livraison>>getAllLivraison() {
 
+        List<Livraison> colis = livraisonService.getAllLivraison();
+        return new ResponseEntity<>(colis, HttpStatus.OK);
+    }
     @PostMapping
     public ResponseEntity<Livraison> saveLivraison(@RequestBody Livraison livraison) {
         try {
@@ -32,7 +53,7 @@ public class LivraisonController {
         }
     }
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<ResponseDto> getUser(@PathVariable("id") Long livraisonId) {
         ResponseDto responseDto = livraisonService.getLivraisonById(livraisonId);
 

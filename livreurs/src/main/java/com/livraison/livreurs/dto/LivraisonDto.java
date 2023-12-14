@@ -1,9 +1,11 @@
-package com.livraison.livraisons.dto;
+package com.livraison.livreurs.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 import java.util.List;
-
-import lombok.*;
 
 @Data
 @AllArgsConstructor
@@ -13,5 +15,6 @@ public class LivraisonDto {
     private Date date_livraison ;
     private String destination;
     private Long livreurId;
+
 
 }

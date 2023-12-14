@@ -18,6 +18,7 @@ public class Livraison {
     @Temporal(TemporalType.DATE)
     private Date date_livraison;
     private String destination;
+    private Long livreurId;
 
 
     /*@OneToMany(mappedBy = "livraison", cascade = CascadeType.ALL, orphanRemoval = true)

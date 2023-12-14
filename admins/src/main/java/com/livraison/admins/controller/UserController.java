@@ -69,6 +69,22 @@ public class UserController {
                 .map(user -> new ResponseEntity<>(user, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
+    @PutMapping("/{userId}")
+    public ResponseEntity<UserInfo> updateUser(
+            @PathVariable int userId,
+            @RequestParam String currentPassword,
+            @RequestParam String newPassword,
+            @RequestBody UserInfo updatedUserInfo
+    ) {
+        try {
+            UserInfo updatedUser = userInfoService.updateUser(userId, currentPassword, newPassword, updatedUserInfo);
+            return new ResponseEntity<>(updatedUser, HttpStatus.OK);
+        } catch (AuthenticationException e) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        } catch (UserNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
     // Update user password
     @PutMapping("/{userId}/update-password")
     public ResponseEntity<UserInfo> updatePassword(
@@ -85,16 +101,25 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
     @GetMapping("/welcome")
     public String welcomea() {
         return "Welcome this endpoint is not hh";
     }
 
-    @PostMapping
-    public String addNewUser(@RequestBody UserInfo userInfo) {
-        return userInfoService.addUser(userInfo);
+    @PostMapping("/newuser")
+    public ResponseEntity<String> createUser(@RequestBody UserInfo userInfo) {
+        try {
+            String result = userInfoService.addUser(userInfo);
+            if (result.equals("User Added Successfully")) {
+                return new ResponseEntity<>(result, HttpStatus.CREATED);
+            } else {
+                return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>("Error creating user: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
-
     // Delete user
     @DeleteMapping("/{userId}")
     public ResponseEntity<Void> deleteUser(@PathVariable int userId) {

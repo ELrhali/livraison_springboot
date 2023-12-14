@@ -6,6 +6,7 @@ import com.livraison.admins.repository.UserInfoRepository;
 import com.livraison.admins.exceptions.UserNotFoundException;
 import io.jsonwebtoken.JwtException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -34,12 +35,55 @@ public class UserInfoService implements UserDetailsService {
         return userDetail.map(UserInfoDetails::new)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found " + username));
     }
+    public UserInfo updateUser(int userId, String currentPassword, String newPassword, UserInfo updatedUserInfo) {
+        Optional<UserInfo> existingUser = repository.findById(userId);
+
+        if (existingUser.isPresent()) {
+            UserInfo userToUpdate = existingUser.get();
+
+            // Check if the provided current password matches the stored password
+            if (passwordEncoder.matches(currentPassword, userToUpdate.getPassword())) {
+                // Update the password
+                userToUpdate.setPassword(passwordEncoder.encode(newPassword));
+
+                // Update other user information
+                userToUpdate.setName(updatedUserInfo.getName());
+                userToUpdate.setEmail(updatedUserInfo.getEmail());
+                userToUpdate.setRoles(updatedUserInfo.getRoles());
+
+                return repository.save(userToUpdate);
+            } else {
+                // Password does not match, handle authentication failure
+                throw new InvalidPasswordException("Invalid current password for user with ID: " + userId);
+            }
+        } else {
+            // Handle user not found
+            throw new UserNotFoundException("User not found");
+        }
+    }
 
     public String addUser(UserInfo userInfo) {
-        userInfo.setPassword(passwordEncoder.encode(userInfo.getPassword()));
-        repository.save(userInfo);
-        return "User Added Successfully";
+        try {
+            // Check if the name or email already exists before adding a user
+            if (repository.existsByName(userInfo.getName())) {
+                return "Error adding user: Name already exists";
+            }
+
+            if (repository.existsByEmail(userInfo.getEmail())) {
+                return "Error adding user: Email already exists";
+            }
+
+            userInfo.setPassword(passwordEncoder.encode(userInfo.getPassword()));
+            repository.save(userInfo);
+            return "User Added Successfully";
+        } catch (DataIntegrityViolationException e) {
+            // This exception will be thrown if the unique constraint is violated
+            return "Error adding user: Name or email already exists";
+        } catch (Exception e) {
+            return "Error adding user: " + e.getMessage();
+        }
     }
+
     public List<UserInfo> getAllUsers() {
         return repository.findAll();
     }

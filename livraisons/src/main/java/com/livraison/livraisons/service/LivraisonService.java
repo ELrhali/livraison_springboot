@@ -21,6 +21,10 @@ public class LivraisonService {
     private LivraionRepository livraionRepository;
     @Autowired
     private RestTemplate restTemplate;
+
+    public List<Livraison> getAllLivraison() {
+        return livraionRepository.findAll();
+    }
     public Livraison saveLivraison(Livraison livraison) {
         // Vérifier que la destination est spécifiée
         if (livraison.getDestination() == null || livraison.getDestination().isEmpty()) {
@@ -57,6 +61,7 @@ public class LivraisonService {
         livraisonDto.setId(livraison.getId());
         livraisonDto.setDestination(livraison.getDestination());
         livraisonDto.setDate_livraison(livraison.getDate_livraison());
+        livraisonDto.setLivreurId(livraison.getLivreurId());
         return livraisonDto;
     }
     public void deleteLivraison(Long livraisonId) {
@@ -101,6 +106,7 @@ public class LivraisonService {
 
         return responseDto;
     }
+
     public Livraison updateLivraison(Long livraisonId, Livraison updatedLivraison) {
         // Vérifier si la livraison existe
         Livraison existingLivraison = livraionRepository.findById(livraisonId).orElse(null);
@@ -114,7 +120,7 @@ public class LivraisonService {
             Livraison updatedLivraisonEntity = livraionRepository.save(existingLivraison);
 
             // Mettre à jour les colis associés
-            updateColisLivraisonAssociation(livraisonId, updatedLivraisonEntity);
+        //   updateColisLivraisonAssociation(livraisonId, updatedLivraisonEntity);
 
             return updatedLivraisonEntity;
         } else {
@@ -123,10 +129,10 @@ public class LivraisonService {
         }
     }
 
-    private void updateColisLivraisonAssociation(Long livraisonId, Livraison updatedLivraison) {
+  /*  private void updateColisLivraisonAssociation(Long livraisonId, Livraison updatedLivraison) {
         // Appel au service Colis pour mettre à jour l'association avec la nouvelle livraison
         restTemplate.put("http://localhost:8090/api/colis/livraison/{livraisonId}", null, livraisonId);
-    }
+    }*/
     // Créer une nouvelle livraison
     /*public Livraison createLivraison(Livraison livraison) {
         return livraionRepository.save(livraison);
@@ -154,4 +160,40 @@ public class LivraisonService {
         livraionRepository.deleteById(id);
     }
 */
+    public ResponseDto getLivraisonWithColis(Long livraisonId) {
+        ResponseDto responseDto = new ResponseDto();
+        LivraisonDto livraisonDto = mapToLivraisonDto(livraionRepository.findById(livraisonId).orElse(null));
+        responseDto.setLivraisonDto(livraisonDto);
+
+        // Fetch the list of Colis items for the given LivraisonId
+        ResponseEntity<ColisDto[]> responseEntity = restTemplate
+                .getForEntity("http://localhost:8090/api/colis/livraison/" + livraisonDto.getId(),
+                        ColisDto[].class);
+        ColisDto[] colisArray = responseEntity.getBody();
+        List<ColisDto> colisList = Arrays.asList(colisArray);
+
+        responseDto.setColisList(colisList);
+        return responseDto;
+    }
+
+   public List<LivraisonDto> getLivraisonByLivreurId(Long livreurId) {
+        List<Livraison> livraisonList = livraionRepository.findAllByLivreurId(livreurId);
+        return livraisonList.stream()
+                .map(this::mapToLivraisonDto)
+                .collect(Collectors.toList());
+    }
+    private LivraisonDto mapToLivraisonDto(Livraison livraison) {
+        if (livraison != null) {
+            LivraisonDto livraisonDto = new LivraisonDto();
+            livraisonDto.setId(livraison.getId());
+            livraisonDto.setDate_livraison(livraison.getDate_livraison());
+            livraisonDto.setDestination(livraison.getDestination());
+            livraisonDto.setLivreurId(livraison.getLivreurId()); // Set livreurId property
+
+            // Make sure to set other properties as needed
+
+            return livraisonDto;
+        }
+        return null; // Return null if the input Livraison is null
+    }
 }
