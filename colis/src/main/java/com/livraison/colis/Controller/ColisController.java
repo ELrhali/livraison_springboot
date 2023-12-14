@@ -5,7 +5,9 @@ import com.livraison.colis.Service.ColisService;
 import com.livraison.colis.dto.ColisDto;
 import com.livraison.colis.exception.ColisNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,6 +36,19 @@ public class ColisController {
         } catch (ColisNotFoundException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
+    }
+    @PutMapping("/livraison/update-status/{colisId}")
+    public ResponseEntity<Colis> updateColisStatus(
+            @PathVariable Long colisId,
+            @RequestBody Colis updatedColis
+    ) {
+        Colis result = colisService.updateColisStatus(colisId, updatedColis);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON); // Définir le Content-Type de la réponse
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(result);
     }
 
     @GetMapping("/livraison/{livraisonId}")

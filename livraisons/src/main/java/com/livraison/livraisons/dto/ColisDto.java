@@ -15,6 +15,7 @@ public class ColisDto {
     private String typeContenu;
     private String status;
     private String livraisonId;
+    private String nouveauStatut;
 
 
 

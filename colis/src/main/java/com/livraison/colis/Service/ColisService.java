@@ -162,6 +162,16 @@ public class ColisService {
             throw new ColisNotFoundException("Colis with ID " + colisId + " not found");
         }
     }
+    public Colis updateColisStatus(Long colisId, Colis updatedColis) {
+        Colis existingColis = colisRepository.findById(colisId).orElse(null);
+
+        if (existingColis != null) {
+            existingColis.setStatus(updatedColis.getNouveauStatut());
+            return colisRepository.save(existingColis);
+        } else {
+            throw new ColisNotFoundException("Colis with ID " + colisId + " not found");
+        }
+    }
     // Supprimer un colis par son ID
     public void deleteColis(Long id) {
         colisRepository.deleteById(id);

@@ -20,6 +20,8 @@ public class Colis {
     private String code; // Numéro de suivi du colis
     private String typeContenu; // Type de contenu du colis (électroniques, vêtements, etc.)
     private String status;
+    private String nouveauStatut;
+
     @Column(name = "livraison_id")
 
     private Long livraisonId;

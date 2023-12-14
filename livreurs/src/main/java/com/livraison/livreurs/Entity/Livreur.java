@@ -21,6 +21,7 @@ public class Livreur {
     private String prenom;
     private String vehicule;
     private boolean disponible;
+    private String statusColis;
 
     //@OneToMany(mappedBy = "id")
     //private List<Colis> colisLivres;
