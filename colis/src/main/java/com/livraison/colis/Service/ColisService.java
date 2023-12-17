@@ -208,6 +208,10 @@ public class ColisService {
     public List<Colis> getAllColis() {
         return colisRepository.findAll();
     }
+
+    //statistic
+
+
 }
 
 

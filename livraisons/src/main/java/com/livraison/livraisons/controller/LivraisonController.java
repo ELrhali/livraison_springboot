@@ -40,8 +40,8 @@ public class LivraisonController {
     @GetMapping("/all-livraison")
     public ResponseEntity<List<Livraison>>getAllLivraison() {
 
-        List<Livraison> colis = livraisonService.getAllLivraison();
-        return new ResponseEntity<>(colis, HttpStatus.OK);
+        List<Livraison> livraison = livraisonService.getAllLivraison();
+        return new ResponseEntity<>(livraison, HttpStatus.OK);
     }
     @PostMapping
     public ResponseEntity<Livraison> saveLivraison(@RequestBody Livraison livraison) {

@@ -97,4 +97,7 @@ public class LivreurService {
         }
         return new LivreurDto(); // Return LivreurDto with default or null values
     }
+    public  List<Livreur> getAllLivreur(){
+        return  livreurRepository.findAll();
+    }
 }

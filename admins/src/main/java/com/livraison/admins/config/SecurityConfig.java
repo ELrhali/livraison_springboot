@@ -42,13 +42,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
-   /* @Autowired
+    @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.inMemoryAuthentication()
                 .withUser("username")
                 .password("{noop}password") // {noop} indicates plain text password, use appropriate encoding for production
-                .roles("USER");
-    }*/
+                .roles("user");
+    }
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http

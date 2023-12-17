@@ -115,6 +115,7 @@ public class LivraisonService {
             // Mettre à jour les détails de la livraison
             existingLivraison.setDate_livraison(updatedLivraison.getDate_livraison());
             existingLivraison.setDestination(updatedLivraison.getDestination());
+            existingLivraison.setLivreurId(updatedLivraison.getLivreurId());
 
             // Enregistrer la livraison mise à jour
             Livraison updatedLivraisonEntity = livraionRepository.save(existingLivraison);

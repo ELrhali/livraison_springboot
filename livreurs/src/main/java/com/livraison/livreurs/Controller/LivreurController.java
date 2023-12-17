@@ -20,7 +20,12 @@ public class LivreurController {
 
     @Autowired
     private LivreurService livreurService;
+    @GetMapping("/all-livreur")
+    public ResponseEntity<List<Livreur>>getAllLivreur() {
 
+        List<Livreur> livreur = livreurService.getAllLivreur();
+        return new ResponseEntity<>(livreur, HttpStatus.OK);
+    }
     @PostMapping
     public ResponseEntity<Livreur> creerLivreur(@RequestBody Livreur livreur) {
         try {
