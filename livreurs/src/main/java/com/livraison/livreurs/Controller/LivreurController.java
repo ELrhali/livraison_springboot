@@ -3,6 +3,7 @@ package com.livraison.livreurs.Controller;
 import com.livraison.livreurs.Entity.Livreur;
 import com.livraison.livreurs.Service.LivreurService;
 import com.livraison.livreurs.dto.ResponseDto;
+import com.livraison.livreurs.exception.LivreurNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -78,5 +79,13 @@ public class LivreurController {
         }
     }
 
-
+    @PutMapping("/{id}")
+    public ResponseEntity<Livreur> updateLivreur(@PathVariable("id") Long livraisonId, @RequestBody Livreur updatedLivreur) {
+        try {
+            Livreur updatedLivreurEntity = livreurService.updateLivreur(livraisonId, updatedLivreur);
+            return ResponseEntity.ok(updatedLivreurEntity);
+        } catch (LivreurNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); // Ou créez un message d'erreur personnalisé si nécessaire
+        }
+    }
 }

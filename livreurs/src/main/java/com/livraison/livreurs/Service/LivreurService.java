@@ -58,7 +58,10 @@ public class LivreurService {
             existingLivreur.setPrenom(livreur.getPrenom());
             existingLivreur.setVehicule(livreur.getVehicule());
             existingLivreur.setDisponible(livreur.isDisponible());
-
+            existingLivreur.setCode(livreur.getCode());
+            existingLivreur.setAddrese(livreur.getAddrese());
+            existingLivreur.setPhone(livreur.getPhone());
+            existingLivreur.setStatusColis(livreur.getStatusColis());
             return livreurRepository.save(existingLivreur);
         }
         return null;  // Peut-être vous voulez gérer autrement si le livreur n'existe pas
@@ -91,8 +94,16 @@ public class LivreurService {
             LivreurDto livreurDto = new LivreurDto();
             livreurDto.setId(livreur.getId());
             livreurDto.setNom(livreur.getNom());
+            livreurDto.setPrenom(livreur.getPrenom());
             livreurDto.setVehicule(livreur.getVehicule());
             livreurDto.setDisponible(livreur.isDisponible());
+            livreurDto.setCode(livreur.getCode());
+            livreurDto.setAddrese(livreur.getAddrese());
+            livreurDto.setPhone(livreur.getPhone());
+            livreurDto.setStatusColis(livreur.getStatusColis());
+
+
+
             return livreurDto;
         }
         return new LivreurDto(); // Return LivreurDto with default or null values

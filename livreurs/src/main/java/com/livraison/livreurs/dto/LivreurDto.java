@@ -14,4 +14,7 @@ public class LivreurDto {
     private String vehicule;
     private boolean disponible;
     private String statusColis;
+    private String code;
+    private String addrese;
+    private String phone;
 }
