@@ -7,4 +7,6 @@ import java.util.List;
 @Repository
 public interface ColisRepository extends JpaRepository<Colis, Long> {
    List<Colis> findAllByLivraisonId(Long id);
+   Long countByStatus(String status);
+
 }

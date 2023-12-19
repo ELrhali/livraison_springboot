@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDate;
 import java.util.Date;
 
 @Data
@@ -19,7 +21,9 @@ public class Livraison {
     private Date date_livraison;
     private String destination;
     private Long livreurId;
-
+    @Column(name = "date_creation")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private LocalDate dateCreation = LocalDate.now();
 
     /*@OneToMany(mappedBy = "livraison", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Colis> colis = new ArrayList<>();*/

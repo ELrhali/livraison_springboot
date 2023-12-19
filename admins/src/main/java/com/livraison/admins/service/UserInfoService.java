@@ -137,4 +137,8 @@ public class UserInfoService implements UserDetailsService {
             throw new UserNotFoundException("User not found");
         }
     }
+    //statistic
+    public Long getTotalUsers() {
+        return repository.count();
+    }
 }

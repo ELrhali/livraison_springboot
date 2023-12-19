@@ -210,7 +210,12 @@ public class ColisService {
     }
 
     //statistic
-
+    public Long getTotalColis() {
+        return colisRepository.count();
+    }
+    public Long getCountByStatus(String status) {
+        return colisRepository.countByStatus(status);
+    }
 
 }
 

@@ -1,8 +1,12 @@
 package com.livraison.colis.Entity;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDate;
+
 @Entity
 @Data
 @NoArgsConstructor
@@ -21,8 +25,9 @@ public class Colis {
     private String typeContenu; // Type de contenu du colis (électroniques, vêtements, etc.)
     private String status;
     private String nouveauStatut;
-
+    @Column(name = "date_creation")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private LocalDate dateCreation = LocalDate.now();
     @Column(name = "livraison_id")
-
     private Long livraisonId;
 }

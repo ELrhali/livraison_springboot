@@ -121,4 +121,26 @@ public class ColisController {
         colisService.affecterLivraison(id, livraison);
         return new ResponseEntity<>("Livraison affectée au colis", HttpStatus.OK);
     }*/
+    //statistic
+    @GetMapping("/total")
+    public ResponseEntity<Long> getTotalColis() {
+        Long totalColis = colisService.getTotalColis();
+        return ResponseEntity.ok(totalColis);
+    }
+    @GetMapping("/total/enretard")
+    public ResponseEntity<Long> getCountEnRetard() {
+        Long countEnRetard = colisService.getCountByStatus("enretard");
+        return ResponseEntity.ok(countEnRetard);
+    }
+    @GetMapping("/total/encour")
+    public ResponseEntity<Long> getCountEncour() {
+        Long countEncour = colisService.getCountByStatus("encour");
+        return ResponseEntity.ok(countEncour);
+    }
+    @GetMapping("/total/livre")
+    public ResponseEntity<Long> getCountLivre() {
+        Long countEnLivre = colisService.getCountByStatus("livre");
+        return ResponseEntity.ok(countEnLivre);
+    }
+
 }

@@ -162,4 +162,10 @@ public class UserController {
         }
     }
 
+    //statistic
+    @GetMapping("/total")
+    public ResponseEntity<Long> getTotalUsers() {
+        Long TotalUsers = userInfoService.getTotalUsers();
+        return ResponseEntity.ok(TotalUsers);
+    }
 }
