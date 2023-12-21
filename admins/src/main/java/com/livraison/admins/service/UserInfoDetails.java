@@ -13,15 +13,19 @@ public class UserInfoDetails implements UserDetails {
 
     private String name;
     private String password;
+    private String role;
+
     private List<GrantedAuthority> authorities;
 
-    public UserInfoDetails(UserInfo userInfo) {
-        name = userInfo.getName();
-        password = userInfo.getPassword();
-        authorities = Arrays.stream(userInfo.getRoles().split(","))
-                .map(SimpleGrantedAuthority::new)
-                .collect(Collectors.toList());
-    }
+
+  public UserInfoDetails(UserInfo userInfo, String roles) {
+      name = userInfo.getName();
+      password = userInfo.getPassword();
+      role = userInfo.getRoles();
+      authorities = Arrays.stream(roles.split(","))
+              .map(SimpleGrantedAuthority::new)
+              .collect(Collectors.toList());
+  }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -43,6 +47,9 @@ public class UserInfoDetails implements UserDetails {
         return true;
     }
 
+    public String getRole() {
+        return role;
+    }
     @Override
     public boolean isAccountNonLocked() {
         return true;
@@ -57,4 +64,14 @@ public class UserInfoDetails implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+
+
+      /*  public UserInfoDetails(UserInfo userInfo) {
+        name = userInfo.getName();
+        password = userInfo.getPassword();
+        authorities = Arrays.stream(userInfo.getRoles().split(","))
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
+    }*/
 }

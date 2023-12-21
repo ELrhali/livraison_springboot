@@ -3,7 +3,9 @@ package com.livraison.admins.controller;
 import com.livraison.admins.entity.AuthRequest;
 import com.livraison.admins.entity.UserInfo;
 import com.livraison.admins.exceptions.UserNotFoundException;
+import com.livraison.admins.repository.UserInfoRepository;
 import com.livraison.admins.service.JwtService;
+import com.livraison.admins.service.UserInfoDetails;
 import com.livraison.admins.service.UserInfoService;
 import io.jsonwebtoken.JwtException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,14 +16,21 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/api/auth")
 public class UserController {
+    private UserInfoRepository repository;
+    @Autowired
+    public UserController(UserInfoRepository repository) {
+        this.repository = repository;
+    }
 
     @Autowired
     private UserInfoService userInfoService;
@@ -138,17 +147,37 @@ public class UserController {
         return "Welcome to Admin Profile";
     }
 
+    @GetMapping("/test")
+    public ResponseEntity<String> testFindByEmail() {
+        String username = "momo@gmail.com";
+        Optional<UserInfo> userInfoOptional = repository.findByEmail(username);
+
+        if (userInfoOptional.isPresent()) {
+            // L'utilisateur a été trouvé
+            UserInfo userInfo = userInfoOptional.get();
+            String roles = userInfo.getRoles();
+            return ResponseEntity.ok("Utilisateur trouvé. Rôles : " + roles);
+        } else {
+            // L'utilisateur n'a pas été trouvé
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Utilisateur non trouvé pour l'email : " + username);
+        }
+    }
 
     @PostMapping("/generateToken")
     public ResponseEntity<String> authenticateAndGetToken(@RequestBody AuthRequest authRequest) {
         try {
             // Authenticate the user using the provided credentials
-            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword())
+            );
 
             // If authentication is successful, generate a JWT token
             if (authentication.isAuthenticated()) {
-                // Use the JwtService to generate a token for the authenticated user
-                String token = jwtService.generateToken(authRequest.getUsername());
+                UserInfoDetails userDetails = (UserInfoDetails) authentication.getPrincipal();
+                String roles = userDetails.getRole();
+
+                // Utilisez le JwtService pour générer un token avec le rôle
+                String token = jwtService.generateToken(authRequest.getUsername(), roles);
 
                 // Return the generated token
                 return ResponseEntity.ok(token);
@@ -161,7 +190,6 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Authentication failed: " + e.getMessage());
         }
     }
-
     //statistic
     @GetMapping("/total")
     public ResponseEntity<Long> getTotalUsers() {
