@@ -26,14 +26,29 @@ public class UserInfoService implements UserDetailsService {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private JwtService jwtService;
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+   // @Override
+   /* public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
         Optional<UserInfo> userDetail = repository.findByEmail(username);
 
         // Converting userDetail to UserDetails
         return userDetail.map(UserInfoDetails::new)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found " + username));
+    }*/
+   @Override
+   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+       Optional<UserInfo> userDetail = repository.findByEmail(username);
+
+       return userDetail.map(userInfo -> {
+           String roles = retrieveRolesByUsername(username);
+           return new UserInfoDetails(userInfo, roles);
+       }).orElseThrow(() -> new UsernameNotFoundException("User not found " + username));
+   }
+
+
+    public String retrieveRolesByUsername(String username) {
+        Optional<UserInfo> userInfoOptional = repository.findByEmail(username);
+        return userInfoOptional.map(UserInfo::getRoles).orElse("");
     }
     public UserInfo updateUser(int userId, String currentPassword, String newPassword, UserInfo updatedUserInfo) {
         Optional<UserInfo> existingUser = repository.findById(userId);
@@ -135,6 +150,20 @@ public class UserInfoService implements UserDetailsService {
         } else {
             // Handle user not found
             throw new UserNotFoundException("User not found");
+        }
+    }
+    public void testerFindByEmail() {
+        String usernameToTest = "test@gmail.com";
+        Optional<UserInfo> userInfoOptional = repository.findByEmail(usernameToTest);
+
+        if (userInfoOptional.isPresent()) {
+            // L'utilisateur a été trouvé
+            UserInfo userInfo = userInfoOptional.get();
+            System.out.println("Utilisateur trouvé : " + userInfo.getName());
+            System.out.println("Rôles de l'utilisateur : " + userInfo.getRoles());
+        } else {
+            // L'utilisateur n'a pas été trouvé
+            System.out.println("Utilisateur non trouvé pour l'email : " + usernameToTest);
         }
     }
     //statistic

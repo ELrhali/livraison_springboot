@@ -47,7 +47,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         auth.inMemoryAuthentication()
                 .withUser("username")
                 .password("{noop}password") // {noop} indicates plain text password, use appropriate encoding for production
-                .roles("user");
+                .roles("admin");
     }
     @Override
     protected void configure(HttpSecurity http) throws Exception {
