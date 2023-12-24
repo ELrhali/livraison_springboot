@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,6 +21,7 @@ public class ColisDto {
     private String status;
     private Long livraisonId;
     private String nouveauStatut;
+    private LocalDate dateLivraisonPrevue;
 
 
 }

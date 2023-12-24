@@ -1,6 +1,8 @@
 package com.livraison.livraisons.dto;
 import lombok.*;
 
+import java.time.LocalDate;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -16,6 +18,7 @@ public class ColisDto {
     private String status;
     private String livraisonId;
     private String nouveauStatut;
+    private LocalDate dateLivraisonPrevue;
 
 
 
