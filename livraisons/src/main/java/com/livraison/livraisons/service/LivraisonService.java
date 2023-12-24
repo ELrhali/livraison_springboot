@@ -11,6 +11,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import org.springframework.web.client.RestTemplate;
+
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -197,6 +200,14 @@ public class LivraisonService {
         }
         return null; // Return null if the input Livraison is null
     }
+    public List<Livraison> getLivraisonsWithinAMonth() {
+        LocalDate currentDate = LocalDate.now();
+        LocalDate endDate = currentDate.plusMonths(1);
 
+        Date startDateAsDate = Date.from(currentDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        Date endDateAsDate = Date.from(endDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+
+        return livraionRepository.findLivraisonsWithinAMonth(startDateAsDate, endDateAsDate);
+    }
 }
 

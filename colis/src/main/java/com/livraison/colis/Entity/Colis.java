@@ -30,4 +30,7 @@ public class Colis {
     private LocalDate dateCreation = LocalDate.now();
     @Column(name = "livraison_id")
     private Long livraisonId;
+    @Column(name = "date_livraison_prevue")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private LocalDate dateLivraisonPrevue;
 }

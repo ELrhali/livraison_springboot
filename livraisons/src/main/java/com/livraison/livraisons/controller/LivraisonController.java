@@ -127,4 +127,8 @@ public class LivraisonController {
         livraisonService.deleteLivraison(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }*/
+    @GetMapping("/within-a-month")
+    public List<Livraison> getLivraisonsWithinAMonth() {
+        return livraisonService.getLivraisonsWithinAMonth();
+    }
 }
