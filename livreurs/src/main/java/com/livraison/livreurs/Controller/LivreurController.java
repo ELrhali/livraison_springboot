@@ -2,6 +2,7 @@ package com.livraison.livreurs.Controller;
 
 import com.livraison.livreurs.Entity.Livreur;
 import com.livraison.livreurs.Service.LivreurService;
+import com.livraison.livreurs.dto.LivreurDto;
 import com.livraison.livreurs.dto.ResponseDto;
 import com.livraison.livreurs.exception.LivreurNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +36,11 @@ public class LivreurController {
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+    @GetMapping("/disponibles")
+    public ResponseEntity<List<LivreurDto>> getLivreursDisponibles() {
+        List<LivreurDto> livreursDisponibles = livreurService.getLivreursDisponibles();
+        return new ResponseEntity<>(livreursDisponibles, HttpStatus.OK);
     }
 
     /*@GetMapping
@@ -86,6 +92,20 @@ public class LivreurController {
             return ResponseEntity.ok(updatedLivreurEntity);
         } catch (LivreurNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); // Ou créez un message d'erreur personnalisé si nécessaire
+        }
+    }
+    @GetMapping("/livreur-id")
+    public ResponseEntity<Long> getLivreurIdByEmail(@RequestParam("email") String email) {
+        try {
+            Long livreurId = livreurService.getLivreurIdByEmail(email);
+
+            if (livreurId != null) {
+                return new ResponseEntity<>(livreurId, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

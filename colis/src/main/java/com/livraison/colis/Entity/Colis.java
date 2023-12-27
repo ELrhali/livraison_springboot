@@ -33,4 +33,6 @@ public class Colis {
     @Column(name = "date_livraison_prevue")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate dateLivraisonPrevue;
+    private Long  commercantId;
+
 }

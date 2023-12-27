@@ -13,6 +13,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -107,6 +108,35 @@ public class LivreurService {
             return livreurDto;
         }
         return new LivreurDto(); // Return LivreurDto with default or null values
+    }
+
+    public List<LivreurDto> getLivreursDisponibles() {
+        List<Livreur> livreurs = livreurRepository.findAllByDisponible(true);
+        return livreurs.stream()
+                .map(this::mapToLivreurDto)
+                .collect(Collectors.toList());
+    }
+
+    private LivreurDto mapToLivreurDto(Livreur livreur) {
+        LivreurDto livreurDto = new LivreurDto();
+        livreurDto.setId(livreur.getId());
+        livreurDto.setNom(livreur.getNom());
+        livreurDto.setPrenom(livreur.getPrenom());
+        livreurDto.setVehicule(livreur.getVehicule());
+        livreurDto.setDisponible(livreur.isDisponible());
+        livreurDto.setStatusColis(livreur.getStatusColis());
+        livreurDto.setCode(livreur.getCode());
+        livreurDto.setAddrese(livreur.getAddrese());
+        livreurDto.setPhone(livreur.getPhone());
+        // Ajoutez d'autres propriétés si nécessaire
+        return livreurDto;
+    }
+
+    public Long getLivreurIdByEmail(String email) {
+        Optional<Livreur> livreurOptional = livreurRepository.findByEmail(email);
+
+        // Utilisez map pour extraire l'ID s'il existe, sinon, retournez null
+        return livreurOptional.map(Livreur::getId).orElse(null);
     }
     public  List<Livreur> getAllLivreur(){
         return  livreurRepository.findAll();

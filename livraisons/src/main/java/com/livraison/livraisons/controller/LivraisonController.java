@@ -7,10 +7,12 @@ import com.livraison.livraisons.exception.LivraisonNotFoundException;
 import com.livraison.livraisons.service.LivraisonService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -130,5 +132,17 @@ public class LivraisonController {
     @GetMapping("/within-a-month")
     public List<Livraison> getLivraisonsWithinAMonth() {
         return livraisonService.getLivraisonsWithinAMonth();
+    }
+    @GetMapping("/livraisonProche")
+    public ResponseEntity<Long> trouverLivraisonProche(
+            @RequestParam("dateLivraison") @DateTimeFormat(pattern = "yyyy-MM-dd") Date dateLivraison,@RequestParam("destination") String destination) {
+
+        Long livraisonProche = livraisonService.trouverLivraisonProche(dateLivraison,destination);
+
+        if (livraisonProche != null) {
+            return ResponseEntity.ok(livraisonProche);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

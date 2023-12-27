@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,37 +21,57 @@ public class ColisService {
     @Autowired
     private RestTemplate restTemplate;
     private static final String LIVRAISON_SERVICE_URL = "http://localhost:8089/api/livraisons/";
-    public void deleteColisByLivraisonId(Long livraisonId) {
-        // Find all Colis items with the specified LivraisonId
-        List<Colis> colisList = colisRepository.findAllByLivraisonId(livraisonId);
 
-        // Delete each Colis item
-        for (Colis colis : colisList) {
-            colisRepository.deleteById(colis.getId());
-        }
-    }
+    /*  public ColisDto addColis(ColisDto colisDto) {
+          // Vérifier si livraisonId est null ou inférieur ou égal à zéro
+          if (colisDto.getLivraisonId() == null || colisDto.getLivraisonId() <= 0) {
+              throw new IllegalArgumentException("LivraisonId doit être spécifié et doit être supérieur à zéro.");
+          }
+
+          // Vérifier si Livraison avec livraisonId existe
+          ResponseEntity<LivraisonDto> livraisonResponse = restTemplate.getForEntity(
+                  LIVRAISON_SERVICE_URL + colisDto.getLivraisonId(),
+                  LivraisonDto.class);
+
+          if (livraisonResponse.getStatusCode() != HttpStatus.OK) {
+              throw new ColisNotFoundException("Livraison avec l'ID " + colisDto.getLivraisonId() + " introuvable.");
+          }
+
+          // LivraisonId existe, procéder à l'enregistrement de Colis
+          Colis colis = mapToColisEntity(colisDto);
+          colisRepository.save(colis);
+
+          // Mapper l'entité Colis en DTO
+          return mapToColisDto(colis);
+      }
+  */
     public ColisDto addColis(ColisDto colisDto) {
-        // Vérifier si livraisonId est null ou inférieur ou égal à zéro
-        if (colisDto.getLivraisonId() == null || colisDto.getLivraisonId() <= 0) {
-            throw new IllegalArgumentException("LivraisonId doit être spécifié et doit être supérieur à zéro.");
+        // If LivraisonId is not provided or is invalid, find the nearest Livraison
+        if (colisDto.getLivraisonId() == null || colisDto.getLivraisonId() == 1) {
+            Long livraisonId = findNearestLivraisonId(colisDto.getDateLivraisonPrevue(), colisDto.getVille());
+            colisDto.setLivraisonId(livraisonId);
         }
 
-        // Vérifier si Livraison avec livraisonId existe
-        ResponseEntity<LivraisonDto> livraisonResponse = restTemplate.getForEntity(
-                LIVRAISON_SERVICE_URL + colisDto.getLivraisonId(),
-                LivraisonDto.class);
-
-        if (livraisonResponse.getStatusCode() != HttpStatus.OK) {
-            throw new ColisNotFoundException("Livraison avec l'ID " + colisDto.getLivraisonId() + " introuvable.");
-        }
-
-        // LivraisonId existe, procéder à l'enregistrement de Colis
+        // Save Colis to the database
         Colis colis = mapToColisEntity(colisDto);
         colisRepository.save(colis);
 
         // Mapper l'entité Colis en DTO
         return mapToColisDto(colis);
     }
+
+    private Long findNearestLivraisonId(LocalDate dateLivraison, String destination) {
+        ResponseEntity<Long> livraisonIdResponse = restTemplate.getForEntity(
+                LIVRAISON_SERVICE_URL + "livraisonProche?dateLivraison={dateLivraison}&destination={destination}",
+                Long.class, dateLivraison, destination);
+
+        if (livraisonIdResponse.getStatusCode() == HttpStatus.OK) {
+            return livraisonIdResponse.getBody();
+        } else {
+            throw new RuntimeException("Failed to find the nearest Livraison.");
+        }
+    }
+
 
 
 
@@ -61,6 +82,14 @@ public class ColisService {
                 .map(this::mapToColisDto)
                 .collect(Collectors.toList());
     }
+
+    public List<ColisDto> getColisByCommercantId(Long commercantId) {
+        List<Colis> colisList = colisRepository.findAllByCommercantId(commercantId);
+        return colisList.stream()
+                .map(this::mapToColisDto)
+                .collect(Collectors.toList());
+    }
+
     public Colis mapToColisEntity(ColisDto colisDto) {
         Colis colis = new Colis();
         colis.setId(colisDto.getId());
@@ -72,6 +101,8 @@ public class ColisService {
         colis.setTypeContenu(colisDto.getTypeContenu());
         colis.setStatus(colisDto.getStatus());
         colis.setLivraisonId(colisDto.getLivraisonId());
+        colis.setDateLivraisonPrevue(colisDto.getDateLivraisonPrevue());
+        colis.setCommercantId(colisDto.getCommercantId());// Fix here
         return colis;
     }
 
@@ -86,28 +117,13 @@ public class ColisService {
         colisDto.setTypeContenu(colis.getTypeContenu());
         colisDto.setStatus(colis.getStatus());
         colisDto.setLivraisonId(colis.getLivraisonId());
+        colisDto.setDateLivraisonPrevue(colis.getDateLivraisonPrevue());
+        colisDto.setCommercantId(colis.getCommercantId());
         return colisDto;
     }
 
 
-    // Méthode pour créer un colis avec association à une livraison
 
-
-    /* public ResponseEntity<?> fetchStudentById(Long id){
-        Optional<Colis> colis =  ColisRepository.findById(id);
-        if(colis.isPresent()){
-            Livraison livraison = restTemplate.getForObject("http://localhost:8082/livraison/" + colis.get().getSchoolId(), School.class);
-            ColisResponse colisResponse = new ColisResponse(
-                    colis.get().getId(),
-                    colis.get().getNom(),
-                    colis.get().getPrenom(),
-                    livraison
-            );
-            return new ResponseEntity<>(colisResponse, HttpStatus.OK);
-        }else{
-            return new ResponseEntity<>("No Student Found",HttpStatus.NOT_FOUND);
-        }
-    }*/
     public Colis createColis(Colis colis) {
         return colisRepository.save(colis);
     }
@@ -116,7 +132,15 @@ public class ColisService {
     public Colis getColisById(Long id) {
         return colisRepository.findById(id).orElse(null);
     }
+    public void deleteColisByByCommercantId(Long commercantId) {
+        // Find all Colis items with the specified LivraisonId
+        List<Colis> colisList = colisRepository.findAllByCommercantId(commercantId);
 
+        // Delete each Colis item
+        for (Colis colis : colisList) {
+            colisRepository.deleteById(colis.getId());
+        }
+    }
     /*public List<Colis> getAllbyLiv(Long id){
         return  colisRepository.findAllByLivraisonId(id);
     }*/

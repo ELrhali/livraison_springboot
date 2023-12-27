@@ -21,12 +21,12 @@ import java.util.stream.Collectors;
 @Service
 public class LivraisonService {
     @Autowired
-    private LivraionRepository livraionRepository;
+    private LivraionRepository livraisonRepository;
     @Autowired
     private RestTemplate restTemplate;
 
     public List<Livraison> getAllLivraison() {
-        return livraionRepository.findAll();
+        return livraisonRepository.findAll();
     }
     public Livraison saveLivraison(Livraison livraison) {
         // Vérifier que la destination est spécifiée
@@ -41,11 +41,11 @@ public class LivraisonService {
         // Autres vérifications ou logiques si nécessaire
 
         // Enregistrer la livraison
-        return livraionRepository.save(livraison);
+        return livraisonRepository.save(livraison);
     }
     public ResponseDto getLivraisonById(Long livraisonId) {
         ResponseDto responseDto = new ResponseDto();
-        Livraison livraison = livraionRepository.findById(livraisonId).orElse(null);
+        Livraison livraison = livraisonRepository.findById(livraisonId).orElse(null);
         if (livraison != null) {
             LivraisonDto livraisonDto = mapToLivraison(livraison);
             // Fetch the list of Colis items for the given LivraisonId
@@ -69,13 +69,13 @@ public class LivraisonService {
     }
     public void deleteLivraison(Long livraisonId) {
         // Check if the LivraisonId exists
-        Livraison livraison = livraionRepository.findById(livraisonId).orElse(null);
+        Livraison livraison = livraisonRepository.findById(livraisonId).orElse(null);
         if (livraison != null) {
             // Delete all Colis items related to the LivraisonId
-            deleteColisByLivraisonId(livraisonId);
+            //deleteColisByLivraisonId(livraisonId);
 
             // Now, delete the Livraison
-            livraionRepository.delete(livraison);
+            livraisonRepository.delete(livraison);
         } else {
             // Handle the case where LivraisonId does not exist
             throw new LivraisonNotFoundException("Livraison with ID " + livraisonId + " not found");
@@ -86,7 +86,7 @@ public class LivraisonService {
         restTemplate.delete("http://localhost:8090/api/colis/livraison/" + livraisonId);
     }
     public List<ResponseDto> getAllLivraisonsWithColis() {
-        List<Livraison> livraisons = livraionRepository.findAll();
+        List<Livraison> livraisons = livraisonRepository.findAll();
         return livraisons.stream()
                 .map(this::mapToResponseDtoWithColis)
                 .collect(Collectors.toList());
@@ -112,7 +112,7 @@ public class LivraisonService {
 
     public Livraison updateLivraison(Long livraisonId, Livraison updatedLivraison) {
         // Vérifier si la livraison existe
-        Livraison existingLivraison = livraionRepository.findById(livraisonId).orElse(null);
+        Livraison existingLivraison = livraisonRepository.findById(livraisonId).orElse(null);
 
         if (existingLivraison != null) {
             // Mettre à jour les détails de la livraison
@@ -121,7 +121,7 @@ public class LivraisonService {
             existingLivraison.setLivreurId(updatedLivraison.getLivreurId());
 
             // Enregistrer la livraison mise à jour
-            Livraison updatedLivraisonEntity = livraionRepository.save(existingLivraison);
+            Livraison updatedLivraisonEntity = livraisonRepository.save(existingLivraison);
 
             // Mettre à jour les colis associés
         //   updateColisLivraisonAssociation(livraisonId, updatedLivraisonEntity);
@@ -139,34 +139,34 @@ public class LivraisonService {
     }*/
     // Créer une nouvelle livraison
     /*public Livraison createLivraison(Livraison livraison) {
-        return livraionRepository.save(livraison);
+        return livraisonRepository.save(livraison);
     }
 */
     // Obtenir toutes les livraisons
     /*public List<Livraison> getAllLivraisons() {
-        return livraionRepository.findAll();
+        return livraisonRepository.findAll();
     }*/
 
     // Obtenir une livraison par son ID
     /*public Livraison getLivraisonById(Long id) {
-        return livraionRepository.findById(id).orElse(null);
+        return livraisonRepository.findById(id).orElse(null);
     }*/
 
    /* @GetMapping("/{livraisonId}")
     public Livraison getLivraisonDetails(@PathVariable Long livraisonId) {
-        return livraionRepository.findById(livraisonId).orElse(null);
+        return livraisonRepository.findById(livraisonId).orElse(null);
     }*/
 
 
 
     // Supprimer une livraison par son ID
     /*public void deleteLivraison(Long id) {
-        livraionRepository.deleteById(id);
+        livraisonRepository.deleteById(id);
     }
 */
     public ResponseDto getLivraisonWithColis(Long livraisonId) {
         ResponseDto responseDto = new ResponseDto();
-        LivraisonDto livraisonDto = mapToLivraisonDto(livraionRepository.findById(livraisonId).orElse(null));
+        LivraisonDto livraisonDto = mapToLivraisonDto(livraisonRepository.findById(livraisonId).orElse(null));
         responseDto.setLivraisonDto(livraisonDto);
 
         // Fetch the list of Colis items for the given LivraisonId
@@ -181,7 +181,7 @@ public class LivraisonService {
     }
 
    public List<LivraisonDto> getLivraisonByLivreurId(Long livreurId) {
-        List<Livraison> livraisonList = livraionRepository.findAllByLivreurId(livreurId);
+        List<Livraison> livraisonList = livraisonRepository.findAllByLivreurId(livreurId);
         return livraisonList.stream()
                 .map(this::mapToLivraisonDto)
                 .collect(Collectors.toList());
@@ -207,7 +207,38 @@ public class LivraisonService {
         Date startDateAsDate = Date.from(currentDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
         Date endDateAsDate = Date.from(endDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
-        return livraionRepository.findLivraisonsWithinAMonth(startDateAsDate, endDateAsDate);
+        return livraisonRepository.findLivraisonsWithinAMonth(startDateAsDate, endDateAsDate);
     }
+
+    public Long trouverLivraisonProche(Date dateLivraison, String destination) {
+        // Récupérer toutes les livraisons de la base de données pour la destination donnée
+        Iterable<Livraison> livraisons = livraisonRepository.findByDestination(destination);
+
+        // Initialiser la variable pour stocker la livraison la plus proche
+        Livraison livraisonProche = null;
+
+        // Initialiser la variable pour stocker la différence minimale entre les dates
+        long differenceMinimale = Long.MAX_VALUE;
+
+        // Parcourir toutes les livraisons pour trouver la plus proche dans le futur
+        for (Livraison livraison : livraisons) {
+            Date dateCourante = livraison.getDate_livraison();
+
+            // Ne considérer que les livraisons futures ou le même jour
+            if (dateCourante.after(dateLivraison) || dateCourante.equals(dateLivraison)) {
+                long difference = Math.abs(dateCourante.getTime() - dateLivraison.getTime());
+
+                // Mettre à jour si la différence est plus petite que la différence minimale actuelle
+                if (difference < differenceMinimale) {
+                    differenceMinimale = difference;
+                    livraisonProche = livraison;
+                }
+            }
+        }
+
+        return livraisonProche.getId();
+    }
+
+
 }
 

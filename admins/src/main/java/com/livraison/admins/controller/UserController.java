@@ -71,16 +71,17 @@ public class UserController {
             return new ResponseEntity<>("Failed to retrieve users: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
     // Get user by ID
     @GetMapping("/{userId}")
-    public ResponseEntity<UserInfo> getUserById(@PathVariable int userId) {
+    public ResponseEntity<UserInfo> getUserById(@PathVariable Long userId) {
         return userInfoService.getUserById(userId)
                 .map(user -> new ResponseEntity<>(user, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
     @PutMapping("/{userId}")
     public ResponseEntity<UserInfo> updateUser(
-            @PathVariable int userId,
+            @PathVariable Long userId,
             @RequestParam String currentPassword,
             @RequestParam String newPassword,
             @RequestBody UserInfo updatedUserInfo
@@ -97,7 +98,7 @@ public class UserController {
     // Update user password
     @PutMapping("/{userId}/update-password")
     public ResponseEntity<UserInfo> updatePassword(
-            @PathVariable int userId,
+            @PathVariable Long userId,
             @RequestParam String currentPassword,
             @RequestParam String newPassword
     ) {
@@ -131,7 +132,7 @@ public class UserController {
     }
     // Delete user
     @DeleteMapping("/{userId}")
-    public ResponseEntity<Void> deleteUser(@PathVariable int userId) {
+    public ResponseEntity<Void> deleteUser(@PathVariable Long userId) {
         userInfoService.deleteUser(userId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
@@ -175,9 +176,12 @@ public class UserController {
             if (authentication.isAuthenticated()) {
                 UserInfoDetails userDetails = (UserInfoDetails) authentication.getPrincipal();
                 String roles = userDetails.getRole();
+                String name = userDetails.getNom();
+                Long livreurId = userDetails.getLivreurId();
+                Long commercantId = userDetails.getLCommercantId();
 
                 // Utilisez le JwtService pour générer un token avec le rôle
-                String token = jwtService.generateToken(authRequest.getUsername(), roles);
+                String token = jwtService.generateToken(authRequest.getUsername(), roles,name,livreurId,commercantId);
 
                 // Return the generated token
                 return ResponseEntity.ok(token);

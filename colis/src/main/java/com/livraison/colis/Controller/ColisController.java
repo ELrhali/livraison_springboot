@@ -56,10 +56,15 @@ public class ColisController {
         List<ColisDto> colisList = colisService.getColisByLivraisonId(livraisonId);
         return ResponseEntity.ok(colisList);
     }
-    @DeleteMapping("/livraison/{livraisonId}")
-    public ResponseEntity<String> deleteColisByLivraisonId(@PathVariable Long livraisonId) {
-        colisService.deleteColisByLivraisonId(livraisonId);
-        return new ResponseEntity<>("Colis items with LivraisonId " + livraisonId + " deleted successfully", HttpStatus.OK);
+    @GetMapping("/commercant/{commercantId}")
+    public ResponseEntity<List<ColisDto>> getColisByCommercantId(@PathVariable Long commercantId) {
+        List<ColisDto> colisList = colisService.getColisByCommercantId(commercantId);
+        return ResponseEntity.ok(colisList);
+    }
+    @DeleteMapping("/commercant/{commercant}")
+    public ResponseEntity<String> deleteColisByLivraisonId(@PathVariable Long commercant) {
+        colisService.deleteColisByByCommercantId(commercant);
+        return new ResponseEntity<>("Colis items with LivraisonId " + commercant + " deleted successfully", HttpStatus.OK);
     }
     @DeleteMapping("/{id}")
     public void deleteColis(@PathVariable Long id) {
