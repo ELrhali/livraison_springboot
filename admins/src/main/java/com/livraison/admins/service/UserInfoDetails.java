@@ -14,6 +14,10 @@ public class UserInfoDetails implements UserDetails {
     private String name;
     private String password;
     private String role;
+    private String nom;
+    private Long livreurId;
+    private Long commercantId;
+
 
     private List<GrantedAuthority> authorities;
 
@@ -22,6 +26,11 @@ public class UserInfoDetails implements UserDetails {
       name = userInfo.getName();
       password = userInfo.getPassword();
       role = userInfo.getRoles();
+      nom = userInfo.getName();
+      livreurId = userInfo.getLivreurId();
+      commercantId = userInfo.getCommercantId();
+
+
       authorities = Arrays.stream(roles.split(","))
               .map(SimpleGrantedAuthority::new)
               .collect(Collectors.toList());
@@ -50,6 +59,17 @@ public class UserInfoDetails implements UserDetails {
     public String getRole() {
         return role;
     }
+
+    public String getNom() {
+        return nom;
+    }
+    public Long getLivreurId() {
+        return livreurId;
+    }
+    public Long getLCommercantId() {
+        return commercantId;
+    }
+
     @Override
     public boolean isAccountNonLocked() {
         return true;

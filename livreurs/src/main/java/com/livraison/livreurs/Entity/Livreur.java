@@ -1,9 +1,6 @@
 package com.livraison.livreurs.Entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,6 +22,10 @@ public class Livreur {
     private String code;
     private String addrese;
     private String phone;
+    @Column(unique = true)
+
+    private String email;
+
 
     //@OneToMany(mappedBy = "id")
     //private List<Colis> colisLivres;

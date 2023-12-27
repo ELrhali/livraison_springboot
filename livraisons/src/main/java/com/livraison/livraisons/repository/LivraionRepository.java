@@ -15,6 +15,7 @@ public interface LivraionRepository extends JpaRepository<Livraison,Long> {
      List<Livraison> findAllByLivreurId(Long id);
      @Query("SELECT l FROM Livraison l WHERE l.date_livraison BETWEEN :startDate AND :endDate")
      List<Livraison> findLivraisonsWithinAMonth(@Param("startDate") Date startDate, @Param("endDate") Date endDate);
+     List<Livraison> findByDestination(String destination);
 
 
 }

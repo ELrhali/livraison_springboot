@@ -22,6 +22,8 @@ public class ColisDto {
     private Long livraisonId;
     private String nouveauStatut;
     private LocalDate dateLivraisonPrevue;
+    private Long  commercantId;
+
 
 
 }

@@ -24,7 +24,7 @@
         <module>colis</module>
         <module>livreurs</module>
         <module>discovery-service</module>
-        <module>config</module>
+        <module>commercants</module>
     </modules>
     <build>
         <plugins>

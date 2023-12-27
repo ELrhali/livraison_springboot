@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ExternalStorageConfigurationManager" enabled="true" />
   <component name="MavenProjectsManager">
@@ -17,6 +18,10 @@
         <option value="$PROJECT_DIR$/commercant/pom.xml" />
         <option value="$PROJECT_DIR$/zuul/pom.xml" />
         <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/commercants/pom.xml" />
+        <option value="$PROJECT_DIR$/Commercantes/pom.xml" />
+        <option value="$PROJECT_DIR$/commercantts/pom.xml" />
+        <option value="$PROJECT_DIR$/trader/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">
@@ -24,6 +29,9 @@
         <option value="$PROJECT_DIR$/adresses/pom.xml" />
         <option value="$PROJECT_DIR$/commandes/pom.xml" />
         <option value="$PROJECT_DIR$/commercant/pom.xml" />
+        <option value="$PROJECT_DIR$/commercantes/pom.xml" />
+        <option value="$PROJECT_DIR$/commercantts/pom.xml" />
+        <option value="$PROJECT_DIR$/config/pom.xml" />
         <option value="$PROJECT_DIR$/discovery/pom.xml" />
       </set>
     </option>
