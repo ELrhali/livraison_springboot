@@ -240,7 +240,12 @@ public class ColisService {
     public Long getCountByStatus(String status) {
         return colisRepository.countByStatus(status);
     }
-
+    public int getNombreColisByCommercantId(Long commercantId) {
+        return colisRepository.countByCommercantId(commercantId);
+    }
+    public Long getCountByStatusAndCommercantId(String status, Long commercantId) {
+        return colisRepository.countByCommercantIdAndStatus(commercantId, status);
+    }
 }
 
 

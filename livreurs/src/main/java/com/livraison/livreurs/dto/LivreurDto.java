@@ -18,5 +18,6 @@ public class LivreurDto {
     private String addrese;
     private String phone;
     private String email;
+    private String image;
 
 }

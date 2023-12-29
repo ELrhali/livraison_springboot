@@ -8,7 +8,8 @@ import java.util.List;
 public interface ColisRepository extends JpaRepository<Colis, Long> {
    List<Colis> findAllByLivraisonId(Long id);
    List<Colis> findAllByCommercantId(Long id);
-
+   int countByCommercantId(Long commercantId);
    Long countByStatus(String status);
+   Long countByCommercantIdAndStatus(Long commercantId, String status);
 
 }

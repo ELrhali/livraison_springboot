@@ -70,4 +70,26 @@ public class CommercantsService  {
         // Make an HTTP call to the Colis service to delete all related Colis items
         restTemplate.delete("http://localhost:8090/api/colis/commercant/" + commercantId);
     }
+    public Commercants getCommercantById(Long id){
+
+        return commercantsRepository.findById(id).orElse(null);
+    }
+    public List<Commercants> getAll(){
+        return  commercantsRepository.findAll();
+    }
+    public Commercants updateCommercant(Long id,Commercants updateCommercant){
+        Commercants existeCommercant = commercantsRepository.findById(id).orElse(null);
+        if (existeCommercant != null){
+            existeCommercant.setPhone(updateCommercant.getPhone());
+            existeCommercant.setPrenom(updateCommercant.getPrenom());
+            existeCommercant.setNom(updateCommercant.getNom());
+            existeCommercant.setCode(updateCommercant.getCode());
+            existeCommercant.setCIN(updateCommercant.getCIN());
+            existeCommercant.setAddrese(updateCommercant.getAddrese());
+            return commercantsRepository.save(existeCommercant);
+        }else {
+            throw new CommercantsNotFoundException("Commercant  avec ID " + id + " n est pas  trouve");
+
+        }
+    }
 }

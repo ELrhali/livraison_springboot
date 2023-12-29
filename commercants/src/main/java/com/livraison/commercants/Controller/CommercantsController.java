@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/commercants")
@@ -23,8 +25,33 @@ public class CommercantsController {
         Commercants createdCommercant = commercantsService.creerCommercants(commercants);
         return ResponseEntity.ok(createdCommercant);
     }
-    @GetMapping("/{id}")
-    public ResponseEntity<ResponseDto> getUser(@PathVariable("id") Long commercantId) {
+    @GetMapping("{id}")
+    public  ResponseEntity<Commercants> getCommercantById(@PathVariable("id") Long commercantId){
+        Commercants commercants =commercantsService.getCommercantById(commercantId);
+        if (commercants!=null){
+            return new ResponseEntity<>(commercants,HttpStatus.OK);
+        }else
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+    }
+    @GetMapping()
+    public ResponseEntity<List<Commercants>> getAll(){
+        List<Commercants> commercants = commercantsService.getAll();
+        return new ResponseEntity<>(commercants,HttpStatus.OK);
+    }
+    @PutMapping("{id}")
+    public ResponseEntity<Commercants> updateCommercant(@PathVariable("id") Long commercantId,@RequestBody Commercants updateCommercant){
+        try {
+            Commercants updateCommercantEntity = commercantsService.updateCommercant(commercantId,updateCommercant);
+            return ResponseEntity.ok(updateCommercantEntity);
+        }catch (CommercantsNotFoundException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
+
+
+    @GetMapping("/Commercant-colis/{id}")
+    public ResponseEntity<ResponseDto> getColisByCommercantId(@PathVariable("id") Long commercantId) {
         ResponseDto responseDto = commercantsService.getColisByCommercantId(commercantId);
 
         if (responseDto.getCommercantsDto() != null) {
