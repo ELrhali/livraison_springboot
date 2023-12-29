@@ -75,13 +75,14 @@ public class LivreurController {
     }
 
 
+
     @DeleteMapping("/{id}")
-    public ResponseEntity<HttpStatus> deleteLivreur(@PathVariable Long id) {
+    public ResponseEntity<String> deleteLivreurById(@PathVariable("id") Long livreursId) {
         try {
-            livreurService.deleteLivreur(id);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            livreurService.deleteLivreurById(livreursId);
+            return new ResponseEntity<>("Livreur with ID " + livreursId + " deleted successfully", HttpStatus.OK);
+        } catch (LivreurNotFoundException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
 

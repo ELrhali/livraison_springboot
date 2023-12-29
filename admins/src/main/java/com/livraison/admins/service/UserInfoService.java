@@ -232,6 +232,10 @@ public class UserInfoService implements UserDetailsService {
             System.out.println("Utilisateur non trouvé pour l'email : " + usernameToTest);
         }
     }
+    public void deteletUserInfoByLivreurId(Long livreurId){
+       UserInfo userInfo = repository.findByLivreurId(livreurId);
+       repository.deleteById(userInfo.getId());
+    }
     //statistic
     public Long getTotalUsers() {
         return repository.count();

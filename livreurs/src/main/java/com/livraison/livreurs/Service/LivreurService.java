@@ -6,6 +6,7 @@ import com.livraison.livreurs.dto.LivraisonDto;
 import com.livraison.livreurs.dto.LivreurDto;
 import com.livraison.livreurs.dto.ResponseDto;
 import com.livraison.livreurs.dto.ResponseDtoLivraison;
+import com.livraison.livreurs.exception.LivreurNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -148,5 +149,25 @@ public class LivreurService {
     }
     public  List<Livreur> getAllLivreur(){
         return  livreurRepository.findAll();
+    }
+
+    public void deleteLivreurById(Long livreurId) {
+        // Check if the LivraisonId exists
+        Livreur livreur = livreurRepository.findById(livreurId).orElse(null);
+        if (livreur != null) {
+            // Delete all Colis items related to the LivreurId
+            deleteUserByLivreurId(livreurId);
+
+            // Now, delete the Livreur
+            livreurRepository.delete(livreur);
+        } else {
+            // Handle the case where LivreurId does not exist
+            throw new LivreurNotFoundException("Livreur with ID " + livreurId + " not found");
+        }
+    }
+
+    private void deleteUserByLivreurId(Long livreurId) {
+        // Make an HTTP call to the Colis service to delete all related Colis items
+        restTemplate.delete("http://localhost:8095/api/auth/livreur/" + livreurId);
     }
 }

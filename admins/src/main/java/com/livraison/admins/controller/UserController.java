@@ -200,4 +200,10 @@ public class UserController {
         Long TotalUsers = userInfoService.getTotalUsers();
         return ResponseEntity.ok(TotalUsers);
     }
+    @DeleteMapping("/livreur/{id}")
+    public ResponseEntity<Void>  deleteUserInfoByLivreurId(@PathVariable  Long id){
+        userInfoService.deteletUserInfoByLivreurId(id);
+    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+
+    }
 }

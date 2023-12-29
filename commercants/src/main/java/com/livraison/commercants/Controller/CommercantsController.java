@@ -62,12 +62,10 @@ public class CommercantsController {
         }
     }
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteCommercants(@PathVariable("id") Long commercantsId) {
-        try {
+    public ResponseEntity<Void> deleteCommercants(@PathVariable("id") Long commercantsId) {
+
             commercantsService.deleteCommercants(commercantsId);
-            return new ResponseEntity<>("Commercants with ID " + commercantsId + " deleted successfully", HttpStatus.OK);
-        } catch (CommercantsNotFoundException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-        }
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+
     }
 }

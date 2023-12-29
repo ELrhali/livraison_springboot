@@ -43,13 +43,16 @@ public class CommercantsService  {
 
         return responseDto;
     }
-    private CommercantsDto mapToCommercants(Commercants livraison){
-        CommercantsDto livraisonDto = new CommercantsDto();
-        livraisonDto.setId(livraison.getId());
-        livraisonDto.setNom(livraison.getNom());
-        livraisonDto.setEmail(livraison.getEmail());
-        livraisonDto.setPhone(livraison.getPhone());
-        return livraisonDto;
+    private CommercantsDto mapToCommercants(Commercants commercant){
+        CommercantsDto commercantDto = new CommercantsDto();
+        commercantDto.setId(commercant.getId());
+        commercantDto.setNom(commercant.getNom());
+        commercantDto.setEmail(commercant.getEmail());
+        commercantDto.setPhone(commercant.getPhone());
+        commercantDto.setCIN(commercant.getCIN());
+        commercantDto.setCode(commercant.getCode());
+
+        return commercantDto;
     }
     public void deleteCommercants(Long commercantId) {
         // Check if the LivraisonId exists
