@@ -25,6 +25,7 @@ public class Livreur {
     @Column(unique = true)
 
     private String email;
+    private String image;
 
 
     //@OneToMany(mappedBy = "id")

@@ -62,9 +62,8 @@ public class ColisController {
         return ResponseEntity.ok(colisList);
     }
     @DeleteMapping("/commercant/{commercant}")
-    public ResponseEntity<String> deleteColisByLivraisonId(@PathVariable Long commercant) {
+    public void deleteColisByLivraisonId(@PathVariable Long commercant) {
         colisService.deleteColisByByCommercantId(commercant);
-        return new ResponseEntity<>("Colis items with LivraisonId " + commercant + " deleted successfully", HttpStatus.OK);
     }
     @DeleteMapping("/{id}")
     public void deleteColis(@PathVariable Long id) {
@@ -147,5 +146,26 @@ public class ColisController {
         Long countEnLivre = colisService.getCountByStatus("livre");
         return ResponseEntity.ok(countEnLivre);
     }
+    @GetMapping("/commercant/colis-total/{commercantId}")
+    public ResponseEntity<Integer> getNombreColisByCommercantId(@PathVariable Long commercantId) {
+        int nombreColis = colisService.getNombreColisByCommercantId(commercantId);
+        return ResponseEntity.ok(nombreColis);
+    }
+    @GetMapping("/commercant/total-enretard/{commercantId}")
+    public ResponseEntity<Long> getCountEnRetardByCommercantId(@PathVariable Long commercantId) {
+        Long countEnRetard = colisService.getCountByStatusAndCommercantId("enretard", commercantId);
+        return ResponseEntity.ok(countEnRetard);
+    }
 
+    @GetMapping("/commercant/total-encour/{commercantId}")
+    public ResponseEntity<Long> getCountEncourByCommercantId(@PathVariable Long commercantId) {
+        Long countEncour = colisService.getCountByStatusAndCommercantId("encour", commercantId);
+        return ResponseEntity.ok(countEncour);
+    }
+
+    @GetMapping("/commercant/total-livre/{commercantId}")
+    public ResponseEntity<Long> getCountLivreByCommercantId(@PathVariable Long commercantId) {
+        Long countLivre = colisService.getCountByStatusAndCommercantId("livre", commercantId);
+        return ResponseEntity.ok(countLivre);
+    }
 }

@@ -63,6 +63,9 @@ public class LivreurService {
             existingLivreur.setAddrese(livreur.getAddrese());
             existingLivreur.setPhone(livreur.getPhone());
             existingLivreur.setStatusColis(livreur.getStatusColis());
+            existingLivreur.setEmail(livreur.getEmail());
+            existingLivreur.setImage(livreur.getImage());
+
             return livreurRepository.save(existingLivreur);
         }
         return null;  // Peut-être vous voulez gérer autrement si le livreur n'existe pas
@@ -102,6 +105,9 @@ public class LivreurService {
             livreurDto.setAddrese(livreur.getAddrese());
             livreurDto.setPhone(livreur.getPhone());
             livreurDto.setStatusColis(livreur.getStatusColis());
+            livreurDto.setEmail(livreur.getEmail());
+            livreurDto.setImage(livreur.getImage());
+
 
 
 
@@ -128,6 +134,8 @@ public class LivreurService {
         livreurDto.setCode(livreur.getCode());
         livreurDto.setAddrese(livreur.getAddrese());
         livreurDto.setPhone(livreur.getPhone());
+        livreurDto.setEmail(livreur.getEmail());
+        livreurDto.setImage(livreur.getImage());
         // Ajoutez d'autres propriétés si nécessaire
         return livreurDto;
     }
