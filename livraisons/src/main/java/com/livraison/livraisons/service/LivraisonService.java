@@ -43,6 +43,44 @@ public class LivraisonService {
         // Enregistrer la livraison
         return livraisonRepository.save(livraison);
     }
+    public Long trouverLivraisonProche(Date dateLivraison, String destination) {
+        // Récupérer toutes les livraisons de la base de données pour la destination donnée
+        Iterable<Livraison> livraisons = livraisonRepository.findByDestination(destination);
+
+        // Initialiser la variable pour stocker la livraison la plus proche
+        Livraison livraisonProche = null;
+
+        // Initialiser la variable pour stocker la différence minimale entre les dates
+        long differenceMinimale = Long.MAX_VALUE;
+
+        // Parcourir toutes les livraisons pour trouver la plus proche dans le futur
+        for (Livraison livraison : livraisons) {
+            Date dateCourante = livraison.getDate_livraison();
+
+            // Ne considérer que les livraisons futures ou le même jour
+            if (dateCourante.after(dateLivraison) || dateCourante.equals(dateLivraison)) {
+                long difference = Math.abs(dateCourante.getTime() - dateLivraison.getTime());
+
+                // Mettre à jour si la différence est plus petite que la différence minimale actuelle
+                if (difference < differenceMinimale) {
+                    differenceMinimale = difference;
+                    livraisonProche = livraison;
+                }
+            }
+        }
+        if (livraisonProche == null) {
+            Livraison nouvelleLivraison = new Livraison();
+            nouvelleLivraison.setDestination(destination);
+            nouvelleLivraison.setDate_livraison(dateLivraison);
+
+            // Vous pouvez ajouter d'autres propriétés ou logique ici
+
+            // Enregistrez la nouvelle livraison
+            livraisonProche = livraisonRepository.save(nouvelleLivraison);
+        }
+
+        return livraisonProche.getId();
+    }
     public ResponseDto getLivraisonById(Long livraisonId) {
         ResponseDto responseDto = new ResponseDto();
         Livraison livraison = livraisonRepository.findById(livraisonId).orElse(null);
@@ -133,37 +171,7 @@ public class LivraisonService {
         }
     }
 
-  /*  private void updateColisLivraisonAssociation(Long livraisonId, Livraison updatedLivraison) {
-        // Appel au service Colis pour mettre à jour l'association avec la nouvelle livraison
-        restTemplate.put("http://localhost:8090/api/colis/livraison/{livraisonId}", null, livraisonId);
-    }*/
-    // Créer une nouvelle livraison
-    /*public Livraison createLivraison(Livraison livraison) {
-        return livraisonRepository.save(livraison);
-    }
-*/
-    // Obtenir toutes les livraisons
-    /*public List<Livraison> getAllLivraisons() {
-        return livraisonRepository.findAll();
-    }*/
 
-    // Obtenir une livraison par son ID
-    /*public Livraison getLivraisonById(Long id) {
-        return livraisonRepository.findById(id).orElse(null);
-    }*/
-
-   /* @GetMapping("/{livraisonId}")
-    public Livraison getLivraisonDetails(@PathVariable Long livraisonId) {
-        return livraisonRepository.findById(livraisonId).orElse(null);
-    }*/
-
-
-
-    // Supprimer une livraison par son ID
-    /*public void deleteLivraison(Long id) {
-        livraisonRepository.deleteById(id);
-    }
-*/
     public ResponseDto getLivraisonWithColis(Long livraisonId) {
         ResponseDto responseDto = new ResponseDto();
         LivraisonDto livraisonDto = mapToLivraisonDto(livraisonRepository.findById(livraisonId).orElse(null));
@@ -210,34 +218,7 @@ public class LivraisonService {
         return livraisonRepository.findLivraisonsWithinAMonth(startDateAsDate, endDateAsDate);
     }
 
-    public Long trouverLivraisonProche(Date dateLivraison, String destination) {
-        // Récupérer toutes les livraisons de la base de données pour la destination donnée
-        Iterable<Livraison> livraisons = livraisonRepository.findByDestination(destination);
 
-        // Initialiser la variable pour stocker la livraison la plus proche
-        Livraison livraisonProche = null;
-
-        // Initialiser la variable pour stocker la différence minimale entre les dates
-        long differenceMinimale = Long.MAX_VALUE;
-
-        // Parcourir toutes les livraisons pour trouver la plus proche dans le futur
-        for (Livraison livraison : livraisons) {
-            Date dateCourante = livraison.getDate_livraison();
-
-            // Ne considérer que les livraisons futures ou le même jour
-            if (dateCourante.after(dateLivraison) || dateCourante.equals(dateLivraison)) {
-                long difference = Math.abs(dateCourante.getTime() - dateLivraison.getTime());
-
-                // Mettre à jour si la différence est plus petite que la différence minimale actuelle
-                if (difference < differenceMinimale) {
-                    differenceMinimale = difference;
-                    livraisonProche = livraison;
-                }
-            }
-        }
-
-        return livraisonProche.getId();
-    }
 
 
 }

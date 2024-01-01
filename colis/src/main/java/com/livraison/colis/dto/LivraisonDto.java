@@ -1,5 +1,6 @@
 package com.livraison.colis.dto;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 import lombok.AllArgsConstructor;
@@ -11,6 +12,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class LivraisonDto {
     private Long id;
-    private Date date_livraison ;
+    private LocalDate date_livraison ;
     private String destination;
 }
