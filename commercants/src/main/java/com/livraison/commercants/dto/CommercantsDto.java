@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CommercantsDto {
     private Long id;
-    private Long CIN;
+    private String CIN;
     private String nom;
     private String prenom;
     private String code;

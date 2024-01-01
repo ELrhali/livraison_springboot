@@ -22,29 +22,6 @@ public class ColisService {
     private RestTemplate restTemplate;
     private static final String LIVRAISON_SERVICE_URL = "http://localhost:8089/api/livraisons/";
 
-    /*  public ColisDto addColis(ColisDto colisDto) {
-          // Vérifier si livraisonId est null ou inférieur ou égal à zéro
-          if (colisDto.getLivraisonId() == null || colisDto.getLivraisonId() <= 0) {
-              throw new IllegalArgumentException("LivraisonId doit être spécifié et doit être supérieur à zéro.");
-          }
-
-          // Vérifier si Livraison avec livraisonId existe
-          ResponseEntity<LivraisonDto> livraisonResponse = restTemplate.getForEntity(
-                  LIVRAISON_SERVICE_URL + colisDto.getLivraisonId(),
-                  LivraisonDto.class);
-
-          if (livraisonResponse.getStatusCode() != HttpStatus.OK) {
-              throw new ColisNotFoundException("Livraison avec l'ID " + colisDto.getLivraisonId() + " introuvable.");
-          }
-
-          // LivraisonId existe, procéder à l'enregistrement de Colis
-          Colis colis = mapToColisEntity(colisDto);
-          colisRepository.save(colis);
-
-          // Mapper l'entité Colis en DTO
-          return mapToColisDto(colis);
-      }
-  */
     public ColisDto addColis(ColisDto colisDto) {
         // If LivraisonId is not provided or is invalid, find the nearest Livraison
         if (colisDto.getLivraisonId() == null || colisDto.getLivraisonId() == 1) {
@@ -99,7 +76,7 @@ public class ColisService {
         colis.setAdresse(colisDto.getAdresse());
         colis.setCode(colisDto.getCode());
         colis.setTypeContenu(colisDto.getTypeContenu());
-        colis.setStatus(colisDto.getStatus());
+        colis.setStatus("encour"); // Assurez-vous que le statut est "en cours"
         colis.setLivraisonId(colisDto.getLivraisonId());
         colis.setDateLivraisonPrevue(colisDto.getDateLivraisonPrevue());
         colis.setCommercantId(colisDto.getCommercantId());// Fix here
