@@ -145,4 +145,8 @@ public class LivraisonController {
             return ResponseEntity.notFound().build();
         }
     }
+    @GetMapping("/sansLivreur")
+    public List<Livraison> getLivraisonWithoutLivreur() {
+        return livraisonService.getLivraisonWithoutLivreur();
+    }
 }

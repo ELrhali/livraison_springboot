@@ -49,7 +49,7 @@ public class CommercantsService  {
         commercantDto.setNom(commercant.getNom());
         commercantDto.setEmail(commercant.getEmail());
         commercantDto.setPhone(commercant.getPhone());
-        commercantDto.setCIN(commercant.getCIN());
+        commercantDto.setCin(commercant.getCin());
         commercantDto.setCode(commercant.getCode());
 
         return commercantDto;
@@ -87,7 +87,7 @@ public class CommercantsService  {
             existeCommercant.setPrenom(updateCommercant.getPrenom());
             existeCommercant.setNom(updateCommercant.getNom());
             existeCommercant.setCode(updateCommercant.getCode());
-            existeCommercant.setCIN(updateCommercant.getCIN());
+            existeCommercant.setCin(updateCommercant.getCin());
             existeCommercant.setAddrese(updateCommercant.getAddrese());
             return commercantsRepository.save(existeCommercant);
         }else {

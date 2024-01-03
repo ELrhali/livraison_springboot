@@ -14,7 +14,7 @@ public class UserInfo {
     private String prenom;
     private String email;
     private String password;
-    private String CIN;
+    private String cin;
     private String roles;
     private Long livreurId;
     private Long  commercantId;

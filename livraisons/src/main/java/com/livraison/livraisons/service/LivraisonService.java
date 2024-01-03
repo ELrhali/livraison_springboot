@@ -217,7 +217,9 @@ public class LivraisonService {
 
         return livraisonRepository.findLivraisonsWithinAMonth(startDateAsDate, endDateAsDate);
     }
-
+    public List<Livraison> getLivraisonWithoutLivreur() {
+        return livraisonRepository.findByLivreurIdIsNull();
+    }
 
 
 

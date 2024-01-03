@@ -11,7 +11,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -21,7 +24,9 @@ public class ColisService {
     @Autowired
     private RestTemplate restTemplate;
     private static final String LIVRAISON_SERVICE_URL = "http://localhost:8089/api/livraisons/";
-
+    public List<Colis> getColisWithoutLivraison() {
+        return colisRepository.findByLivraisonIdIsNull();
+    }
     public ColisDto addColis(ColisDto colisDto) {
         // If LivraisonId is not provided or is invalid, find the nearest Livraison
         if (colisDto.getLivraisonId() == null || colisDto.getLivraisonId() == 1) {
@@ -222,6 +227,24 @@ public class ColisService {
     }
     public Long getCountByStatusAndCommercantId(String status, Long commercantId) {
         return colisRepository.countByCommercantIdAndStatus(commercantId, status);
+    }
+
+
+    public List<Object[]> countColisCreatedSameDate() {
+        return colisRepository.countColisCreatedSameDate();
+    }
+    public List<Map<String, Object>> countTotalColisByDate() {
+        List<Object[]> data = colisRepository.countTotalColisByDate();
+        List<Map<String, Object>> result = new ArrayList<>();
+
+        for (Object[] entry : data) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("date", entry[0]);
+            map.put("totalColis", entry[1]);
+            result.add(map);
+        }
+
+        return result;
     }
 }
 

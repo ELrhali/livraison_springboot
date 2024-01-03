@@ -23,6 +23,7 @@ public class ColisDto {
     private String nouveauStatut;
     private LocalDate dateLivraisonPrevue;
     private Long  commercantId;
+    private LocalDate dateCreation = LocalDate.now();
 
 
 
