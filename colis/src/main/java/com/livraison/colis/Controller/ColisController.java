@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @CrossOrigin(origins = {"http://localhost:4200"})
@@ -69,6 +70,10 @@ public class ColisController {
     public void deleteColis(@PathVariable Long id) {
 
         colisService.deleteColis(id);
+    }
+    @GetMapping("/sanslivraison")
+    public List<Colis> getColisWithoutLivraison() {
+        return colisService.getColisWithoutLivraison();
     }
     /*
       HttpHeaders responseHeaders = new HttpHeaders();
@@ -167,5 +172,9 @@ public class ColisController {
     public ResponseEntity<Long> getCountLivreByCommercantId(@PathVariable Long commercantId) {
         Long countLivre = colisService.getCountByStatusAndCommercantId("livre", commercantId);
         return ResponseEntity.ok(countLivre);
+    }
+    @GetMapping("/stats/totalByDate")
+    public List<Map<String, Object>> getTotalColisByDate() {
+        return colisService.countTotalColisByDate();
     }
 }

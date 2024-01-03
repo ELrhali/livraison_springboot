@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -118,12 +119,14 @@ public class UserInfoService implements UserDetailsService {
             } else if ("user".equals(role)) {
                 // Handle commercant logic
                 CommercantsDto commercantsDto = new CommercantsDto();
-                commercantsDto.setCIN(userInfo.getCIN());
+
                 commercantsDto.setNom(userInfo.getName());
                 commercantsDto.setPrenom(userInfo.getPrenom());
                 commercantsDto.setEmail(userInfo.getEmail());
                 commercantsDto.setAddrese(userInfo.getAddrese());
                 commercantsDto.setPhone(userInfo.getPhone());
+                commercantsDto.setDateCreation(LocalDate.now());
+                commercantsDto.setCin(userInfo.getCin());
 
                 // ... set other properties
 
